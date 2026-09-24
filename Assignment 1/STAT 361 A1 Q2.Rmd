@@ -1,0 +1,35 @@
+---
+title: "STAT 361 Assignment 1 Question 2"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## a) Random number generation and empirical quantile finding
+
+```{r}
+randnums <- rexp(200, rate = 2)
+empqtiles <- quantile(randnums, probs = seq(0.05, 0.95, 0.05))
+```
+
+## b) Theoretical quantile finding and quantile plots
+
+```{r}
+thqtiles = qexp(p = seq(0.05, 0.95, 0.05), rate = 1)
+plot(thqtiles, empqtiles)
+```
+
+## c) Expected line
+
+```{r}
+abline(a = 0, b = 0.5, col = "red", lwd = 2) # Rate of 0.5 since exp rates are 1/2 ratio
+```

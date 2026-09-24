@@ -1,0 +1,32 @@
+---
+title: "STAT 361 Assignment 1 Question 3"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Load data
+
+```{r}
+dat = iris
+head(dat)
+```
+
+## Plot data
+
+```{r}
+par(mfrow = c(2, 2)) # Set 2x2 grid
+hist(dat$Sepal.Length, col = "red", main = "Sepal Length")
+hist(dat$Sepal.Width, col = "blue", main = "Sepal Width")
+hist(dat$Petal.Length, col = "green", main = "Petal Length")
+hist(dat$Petal.Width, col = "purple", main = "Petal Width")
+```

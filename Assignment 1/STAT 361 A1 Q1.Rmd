@@ -1,0 +1,40 @@
+---
+title: "STAT 361 Assignment 1 Question 1"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## a) Random number generation
+
+```{r}
+A <- matrix(round(rnorm(24, mean = 0, sd = 1), digits = 1), nrow = 4, ncol = 6)
+A
+```
+
+## b) Linear system solution
+
+```{r}
+A1 <- A[, -c(2, 5)]
+Y = c(1:4)
+X = solve(A1)%*%Y
+X
+```
+
+## c) Solution validation
+
+```{r}
+A1X = A1%*%X
+same = isTRUE(all.equal(as.vector(A1X), Y))
+print(A1X)
+print(same)
+```
