@@ -30,3 +30,8 @@ hist(dat$Sepal.Width, col = "blue", main = "Sepal Width")
 hist(dat$Petal.Length, col = "green", main = "Petal Length")
 hist(dat$Petal.Width, col = "purple", main = "Petal Width")
 ```
+Sepal Length plot: Seems like a slightly skewed Gaussian (normal) distribution with a mean around 5.5, but overall a pretty even distribution among the variables. Seems very feasible for linear regression.
+
+Sepal Width plot: Much more prominent Gaussian, mean around or just below 3.0. Seems very feasible for linear regression.
+
+Petal Length and Width plots: Bimodal distribution present in each, so predicting anything via a mean would be quite difficult given it will be skewed dramatically. Perhaps using a median-based residual function would be more appropriate, or using a different method to linear regression entirely. This bimodality makes it suitable for a classification problem as well.

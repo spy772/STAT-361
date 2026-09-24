@@ -38,3 +38,4 @@ same = isTRUE(all.equal(as.vector(A1X), Y))
 print(A1X)
 print(same)
 ```
+Yes, the solutions are correct since calculating Y via $$A_1 X$$ is equivalent to $$Y$$ checked by `iSTRUE(all.equal)`.

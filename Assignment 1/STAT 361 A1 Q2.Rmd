@@ -25,11 +25,11 @@ empqtiles <- quantile(randnums, probs = seq(0.05, 0.95, 0.05))
 
 ```{r}
 thqtiles = qexp(p = seq(0.05, 0.95, 0.05), rate = 1)
-plot(thqtiles, empqtiles)
+plot(thqtiles, empqtiles, xlab = "Theoretical Quantiles (lambda = 1)", ylab = "Empirical Quantiles (lambda = 2)", main = "Theoretical vs. Empirical Quantiles")
+
+abline(a = 0, b = 0.5, col = "red", lwd = 2) # Rate of 0.5 since exp rates are 1/2 ratio
 ```
 
 ## c) Expected line
 
-```{r}
-abline(a = 0, b = 0.5, col = "red", lwd = 2) # Rate of 0.5 since exp rates are 1/2 ratio
-```
+Shown in part b) using `abline()`. Expected a slope of 0.5 as the two distributions are the same, just with a different lambda which is directly proportional in terms of scaling differences amongst exponential functions. The ratio is simply 1/2 or 0.5, hence the slope being 0.5.
