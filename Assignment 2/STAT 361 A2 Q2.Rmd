@@ -1,0 +1,56 @@
+---
+title: "STAT 361 Assignment 2 Question 2"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+dat=iris
+```
+
+## a) Outlier Function Definition
+```{r}
+outliers <- function(data) {
+  q1 <- quantile(data, 0.25, names = FALSE)
+  q3 <- quantile(data, 0.75, names = FALSE)
+  iqr = q3 - q1
+  
+  lower_bound <- q1 - 1.2 * iqr
+  upper_bound <- q3 + 1.2 * iqr
+  
+  outlier_vals <- data[data < lower_bound | data > upper_bound]
+  num_outliers <- length(outlier_vals)
+  
+  if (num_outliers == 0) {
+    outlier_vals <- NULL
+  }
+  
+  return(list(num_outliers = num_outliers, outlier_vals = outlier_vals))
+}
+```
+<discussion here>
+
+## b) Outlier Function Application
+```{r}
+# Loop through each unique species from the iris dataset
+for (sp in levels(iris$Species)) {
+  subset_data <- subset(iris, Species == sp)
+  vectorized_data <- subset_data$Petal.Width
+  found_outliers <- outliers(vectorized_data)
+  
+  cat(paste0("Number of Outliers for ", sp, ": ", found_outliers$num_outliers, "\n"))
+  cat("Set of Outliers: ")
+  print(found_outliers$outlier_vals)
+  cat("\n")
+}
+```
