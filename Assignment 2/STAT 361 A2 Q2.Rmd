@@ -38,7 +38,6 @@ outliers <- function(data) {
   return(list(num_outliers = num_outliers, outlier_vals = outlier_vals))
 }
 ```
-<discussion here>
 
 ## b) Outlier Function Application
 ```{r}
@@ -54,3 +53,4 @@ for (sp in levels(iris$Species)) {
   cat("\n")
 }
 ```
+There are two outliers for Petal Width in the setosa species. This is also seen in the respective boxplot in Q1 a). The other two species do not have outliers present in their data, also as seen in the Q1 boxplot.

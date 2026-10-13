@@ -20,26 +20,26 @@ dat=iris
 
 ## a) Distribution Studying
 ```{r}
-par(mfrow=c(2,2))
-boxplot(Sepal.Length ~ Species, main = "Sepal Length vs. Species")
-boxplot(Sepal.Width ~ Species, main = "Sepal Width vs. Species")
-boxplot(Petal.Length ~ Species, main = "Petal Length vs. Species")
-boxplot(Petal.Width ~ Species, main = "Petal Width vs. Species")
-par(mfrow=c(1,1))
+par(mfrow = c(2, 2))
+boxplot(Sepal.Length ~ Species, data = dat, main = "Sepal Length vs. Species")
+boxplot(Sepal.Width  ~ Species, data = dat, main = "Sepal Width vs. Species")
+boxplot(Petal.Length ~ Species, data = dat, main = "Petal Length vs. Species")
+boxplot(Petal.Width  ~ Species, data = dat, main = "Petal Width vs. Species")
+par(mfrow = c(1, 1))
 ```
-<discussion here>
+It seems like Petal Length and Petal Width would be great variables for separation for a classification problem since each of the three species have well-defined boundaries in the box plots (at least visually). For the Sepal variables, Length would be the next-best separator followed by a poor Width separator. Sepal Width is the only one out of the four variables that has two medians (versicolor and virginica) within the same IQR range of another species, whcih can produce lots of noise when training a model or performing predictions.
+
+The setosa species has very narrow ranges in which its data falls within, and is much shorter relative to versicolor and virginica. If we were to use any methods that involve assumptions of constant variance in this data, they would be quite incorrect given this smaller range.
 
 ## b) QQ Plots for investigation
 ```{r}
 par(mfrow = c(1, 3))
-
-# Loop through each unique species
-for (sp in levels(Species)) {
-  subset_data <- subset(iris, Species == sp)
-  qqnorm(subset_data$Petal.Width, main = paste("Q-Q Plot (against petal width):", sp))
+for (sp in levels(dat$Species)) {
+  subset_data <- subset(dat, Species == sp)
+  qqnorm(subset_data$Petal.Width,
+         main = paste("Q-Q Plot (Petal Width):", sp))
   qqline(subset_data$Petal.Width, col = "red")
 }
-
-# Reset layout
 par(mfrow = c(1, 1))
 ```
+It is reasonable to assume a normal distribution for the versicolor species, there seems to be a large influx of points in the middle section followed by less points on the extremes. Next, virginica may also have a normal assumption for the same reason, albeit it might be a bit skewed because the distribtion is a lot heavier near the 25th and 75th percentiles. Finally, I do not believe setosa has a reasonable assumption of a normal distribution due to heavy skewness on the bottom side of the QQ plot.
