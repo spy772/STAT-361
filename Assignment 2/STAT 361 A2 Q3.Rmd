@@ -15,10 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-# Load the built-in dataset
 data(anscombe)
-
-head(anscombe)
 ```
 
 ## a) Covariate-Response Pair Stats
