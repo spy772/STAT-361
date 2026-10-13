@@ -1,0 +1,75 @@
+---
+title: "STAT 361 Assignment 2 Question 3"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+# Load the built-in dataset
+data(anscombe)
+
+head(anscombe)
+```
+
+## a) Covariate-Response Pair Stats
+```{r}
+par(mfrow = c(2, 2))
+plot(anscombe$x1, anscombe$y1, main = "x1 vs y1 Scatter")
+plot(anscombe$x2, anscombe$y2, main = "x2 vs y2 Scatter")
+plot(anscombe$x3, anscombe$y3, main = "x3 vs y3 Scatter")
+plot(anscombe$x4, anscombe$y4, main = "x4 vs y4 Scatter")
+par(mfrow = c(1, 1))
+```
+
+```{r}
+sapply(anscombe, function(x) c(Mean = mean(x), Std_Dev = sd(x)))
+```
+Oddly, despite each of the variables having different scatters and distributions as seen in the plots, every single x (covarieates) variable has the same mean and standard deviation (thus, x1 and x4 have the same mean). Each of the Y (response) variables have the same mean as well (thus, y1, ..., y4 have the same mean). The only thing that differs is slight differences in the response variable standard deviations, but they are so minute that they will barely be noticeable. 
+
+## b) Linear Regression Models
+```{r}
+beta_0s <- c()
+beta_1s <- c()
+
+par(mfrow = c(2, 2))
+
+# Loop through each of the four covariate-response pairs
+for (i in 1:4) {
+  # Find each of the variables by string-matching based on the index i
+  x <- anscombe[[paste0("x", i)]]
+  y <- anscombe[[paste0("y", i)]]
+  
+  b1 <- sum((x - mean(x)) * (y - mean(y))) / sum((x - mean(x))^2)
+  b0 <- mean(y) - b1 * mean(x)
+  beta_0s <- c(beta_0s, b0)
+  beta_1s <- c(beta_1s, b1)
+  
+  plot(x, y, 
+       main = paste("x_Y Pairing", i), 
+       xlab = paste0("x", i), 
+       ylab = paste0("Y", i),
+       pch = 19, col = "royalblue", las = 1)
+  
+  # Fitted regression line based off calculated coefficients
+  abline(a = b0, b = b1, col = "darkorange", lwd = 2)
+}
+
+par(mfrow = c(1, 1))
+```
+
+## (c) Model comparison
+```{r}
+print(data.frame(x_Y_Pairing = 1:4, Intercept_b0 = beta_0s, Slope_b1 = beta_1s))
+```
+
+Seems like the coefficients are nearly identical to each other, with very minuscule differences, which makes sense because the means and standard deviations are either identical or nearly identical. However, not each model is suitable for the data. The most suitable is for the x3-Y3 pairing since the line almost perfectly goes through each point, only adjusted due to the one outlier at x3=11. The x1-Y1 pairing can have an argument to use this model, however a sinusoidal model might be a better fit. For x2-Y2, a polynomial model might be a better fit. For x4-Y4, I am unsure of which model would be best, since there is such an enormous skew in the dataset for some datapoints and the current linear regression model only realistically fits the x4-Y4 influential point.
