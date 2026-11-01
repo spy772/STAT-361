@@ -1,0 +1,60 @@
+---
+title: "STAT 361 Assignment 3 Question 3"
+author: "Edward Tanurkov"
+date: "`r Sys.Date()`"
+output:
+  pdf_document: default
+  html_document: default
+editor_options:
+  markdown:
+    wrap: 72
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+savings <- read.table("Savings.txt", header = TRUE)
+```
+
+## a) Scatter Plot Matrix
+```{r}
+pairs(savings, main = "Savings Scatter Plot Matrix")
+```
+
+## b) SLR for dpi ~ pop15
+```{r}
+slr <- lm(dpi ~ pop15, data = savings)
+summary(slr)
+```
+
+## c) Sample Correlation Coefficient
+```{r}
+# Equivalent to the formula in the class slides
+samp_corr = cor(savings$pop15, savings$dpi, method = "pearson")
+samp_corr^2
+```
+
+This sample correlation coefficient squared is exactly the calculated R^2 value to the `slr` model fit in b).
+
+## d) Multliple Linear Regression Model
+```{r}
+mlr <- lm(sr ~ ., data = savings)
+summary(mlr)
+```
+
+## e) ANOVA and MLR variance
+```{r}
+anova(mlr)
+```
+
+```{r}
+mlr_sigma = sigma(mlr)
+mlr_sigma
+```
+
+```{r}
+ms_res = mlr_sigma^2 * 43
+ms_res
+```
