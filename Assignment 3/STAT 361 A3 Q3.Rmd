@@ -22,12 +22,18 @@ savings <- read.table("Savings.txt", header = TRUE)
 ```{r}
 pairs(savings, main = "Savings Scatter Plot Matrix")
 ```
+Looks like `ddpi` is not entirely useful, it is constant on one axis for every other variable. `pop75` and `dpi` seem to have a steady, positively correlated, linear trend. Meanwhile `pop15` and `pop75` are negatively correlated and linearly-trended, however the axes have very different medians. Otherwise, nothing else really comes to mind. Perhaps some slight bimodality between `pop15` and `sr`?
 
 ## b) SLR for dpi ~ pop15
 ```{r}
 slr <- lm(dpi ~ pop15, data = savings)
 summary(slr)
 ```
+This model can be described as:
+$$\hat{y} = \hat{\beta_0} + \hat{\beta_1}x_{pop15}$$
+for beta_1 being the coefficient for the covariate `pop15`, beta_0 being the intercept/bias, x_pop15 being the covariate `pop15`, and y_hat being the predicted value of `dpi`. 
+
+There is significant association between the variables `pop15` and `dpi`, which is not entirely expected honestly but having a second look at the scatterplot I can see how that would happen. Technically it does follow a linear trend, but the bimodality threw me off. It does seem a bit too clustered at the higher `pop15` values and wide at the earlier values, which also threw me off. Overall, we should be cautious as to the efficacy of the model because the lower R^2 scores of ~0.59 are not too high, and we have about 40% unexplained variance, which is significant.
 
 ## c) Sample Correlation Coefficient
 ```{r}
@@ -44,10 +50,19 @@ mlr <- lm(sr ~ ., data = savings)
 summary(mlr)
 ```
 
+This model can be described as:
+$$\hat{Y} = \hat{\beta}X$$
+for the vector beta with elements beta_0, ... beta_4, for the matrix X with vectors 1, x_1, ..., x_4 and the predicted values of Y_hat being `sr`. x_1 is `pop15`, x_2 is `pop75`, x_3 is `dpi`, and x_4 is `ddpi`. Each beta value index corresponds to the respective x vector index, and beta_0 corresponds to the vector of 1s. 
+
+The fit of the model seems quite poor, with a very low R^2 value of ~0.34 (and and even lower adjusted R^2 value), two highly redundant values of `pop75` and `dpi` that were not statistically significant to the model, thereby hurting its performance. Somehow the F-test parameter has a low p-value, meaning the test of all slopes would be passed at an alpha = 0.05 level, but the other metrics would make me uncomfortable to accept this model. 
+
+The estimated coefficient beta_4, corresponding to `ddpi`, means that for every percentage increase in the rate-of-change of disposable income (`dpi`), we increase the predicted ratio of savings (`sr`) by around 0.42 units. 
+
 ## e) ANOVA and MLR variance
 ```{r}
 anova(mlr)
 ```
+Note the Sum Sq Residuals (SS(Res)) value of 639.35.
 
 ```{r}
 mlr_sigma = sigma(mlr)
@@ -55,6 +70,9 @@ mlr_sigma
 ```
 
 ```{r}
+# 43 degrees of freedom in the residuals according to the mlr model
+# Calculated using formula in class
 ms_res = mlr_sigma^2 * 43
 ms_res
 ```
+We see that the fitted sigma_hat value of the MLR model, when squared and multiplied by the degrees of freedom of the residuals, is exactly the mean-squared residuals. This means that we can efficiently use the mean-squared residuals to estimate the variance of an MLR model.
